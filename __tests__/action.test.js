@@ -27,7 +27,7 @@ beforeAll(() => {
     core.getInput = jest.fn(c => {
         switch (c) {
             case 'paths':
-                return [ "./__tests__/__fixtures__/report.xml" ];
+                return "./__tests__/__fixtures__/report.xml";
             case 'min-coverage-overall':
                 return 45;
             case `min-coverage-changed-files`:
