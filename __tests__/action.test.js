@@ -26,8 +26,8 @@ const output = jest.fn();
 beforeAll(() => {
     core.getInput = jest.fn(c => {
         switch (c) {
-            case 'path':
-                return "./__tests__/__fixtures__/report.xml";
+            case 'paths':
+                return [ "./__tests__/__fixtures__/report.xml" ];
             case 'min-coverage-overall':
                 return 45;
             case `min-coverage-changed-files`:
@@ -74,7 +74,8 @@ describe("Pull Request event", function () {
 
         await action.action();
 
-        expect(comment.mock.calls[0][0].body).toEqual(`|File|Coverage [63.64%]|:green_apple:|
+        expect(comment.mock.calls[0][0].body).toEqual(`
+|File|Coverage [63.64%]|:green_apple:|
 |:-|:-:|:-:|
 |[StringOp.java](https://github.com/thsaravana/jacoco-playground/blob/77b14eb61efcd211ee93a7d8bac80cf292d207cc/src/main/java/com/madrapps/jacoco/operation/StringOp.java)|100%|:green_apple:|
 |[Math.kt](https://github.com/thsaravana/jacoco-playground/blob/77b14eb61efcd211ee93a7d8bac80cf292d207cc/src/main/kotlin/com/madrapps/jacoco/Math.kt)|46.67%|:x:|

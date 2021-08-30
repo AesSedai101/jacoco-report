@@ -10,7 +10,7 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 
 ### Inputs
 
-* `path` - [**required**] Path of the generated xml file.
+* `paths` - [**required**] Path of the generated xml file.
 * `token` - [**required**] Github personal token to add commits to Pull Request
 * `min-coverage-overall` - [*optional*] The minimum code coverage that is required to pass for overall project
 * `min-coverage-changed-files` - [*optional*] The minimum code coverage that is required to pass for changed files
@@ -46,7 +46,8 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@v1.1
         with:
-          path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
+          paths: >
+              ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 60
