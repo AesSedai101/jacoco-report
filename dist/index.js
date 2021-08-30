@@ -12408,8 +12408,9 @@ async function action() {
 
         const xmlList = await reportJsonAsync
         let comment = ""
-        for (let value in xmlList) {
-            if (debugMode) core.info(`report value: ${debug(value)}`);const report = value["report"];
+        for (let value of xmlList) {
+            if (debugMode) core.info(`report value: ${debug(value)}`);
+            const report = value["report"];
 
             const overallCoverage = process.getOverallCoverage(report);
             if (debugMode) core.info(`overallCoverage: ${overallCoverage}`);
