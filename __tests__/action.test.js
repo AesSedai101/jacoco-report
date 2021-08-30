@@ -26,7 +26,7 @@ const output = jest.fn();
 beforeAll(() => {
     core.getInput = jest.fn(c => {
         switch (c) {
-            case 'path':
+            case 'paths':
                 return "./__tests__/__fixtures__/report.xml";
             case 'min-coverage-overall':
                 return 45;
@@ -80,7 +80,8 @@ describe("Pull Request event", function () {
 |[Math.kt](https://github.com/thsaravana/jacoco-playground/blob/77b14eb61efcd211ee93a7d8bac80cf292d207cc/src/main/kotlin/com/madrapps/jacoco/Math.kt)|46.67%|:x:|
 
 |Total Project Coverage|49.02%|:green_apple:|
-|:-|:-:|:-:|`);
+|:-|:-:|:-:|
+`);
     })
 
     it("set overall coverage output", async () => {

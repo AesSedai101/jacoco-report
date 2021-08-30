@@ -12371,7 +12371,7 @@ const render = __nccwpck_require__(8279);
 
 async function action() {
     try {
-        const reportPath = core.getInput('path');
+        const reportPaths = (core.getInput('paths') + '').split("/\s+/");
         const minCoverageOverall = parseFloat(core.getInput('min-coverage-overall'));
         const minCoverageChangedFiles = parseFloat(core.getInput('min-coverage-changed-files'));
         const debugMode = parseBooleans(core.getInput('debug-mode'));
@@ -12401,24 +12401,29 @@ async function action() {
 
         const client = github.getOctokit(core.getInput("token"));
 
-        if (debugMode) core.info(`reportPath: ${reportPath}`);
-        const reportJsonAsync = getJsonReport(reportPath);
+        if (debugMode) core.info(`reportPaths: ${reportPaths}`);
+        const reportJsonAsync = getJsonReport(reportPaths);
         const changedFiles = await getChangedFiles(base, head, client);
         if (debugMode) core.info(`changedFiles: ${debug(changedFiles)}`);
 
-        const value = await reportJsonAsync;
-        if (debugMode) core.info(`report value: ${debug(value)}`);
-        const report = value["report"];
+        const xmlList = await reportJsonAsync
+        let comment = ""
+        for (let value in xmlList) {
+            if (debugMode) core.info(`report value: ${debug(value)}`);const report = value["report"];
 
-        const overallCoverage = process.getOverallCoverage(report);
-        if (debugMode) core.info(`overallCoverage: ${overallCoverage}`);
-        core.setOutput("coverage-overall", parseFloat(overallCoverage.toFixed(2)));
-        const filesCoverage = process.getFileCoverage(report, changedFiles);
-        if (debugMode) core.info(`filesCoverage: ${debug(filesCoverage)}`);
-        core.setOutput("coverage-changed-files", parseFloat(filesCoverage.percentage.toFixed(2)));
+            const overallCoverage = process.getOverallCoverage(report);
+            if (debugMode) core.info(`overallCoverage: ${overallCoverage}`);
+            core.setOutput("coverage-overall", parseFloat(overallCoverage.toFixed(2)));
+            const filesCoverage = process.getFileCoverage(report, changedFiles);
+            if (debugMode) core.info(`filesCoverage: ${debug(filesCoverage)}`);
+            core.setOutput("coverage-changed-files", parseFloat(filesCoverage.percentage.toFixed(2)));
+
+            const covComment = render.getPRComment(overallCoverage, filesCoverage, minCoverageOverall, minCoverageChangedFiles)
+            comment += covComment + `\n`
+        }
 
         if (prNumber != null) {
-            await addComment(prNumber, render.getPRComment(overallCoverage, filesCoverage, minCoverageOverall, minCoverageChangedFiles), client);
+            await addComment(prNumber, comment, client);
         }
     } catch (error) {
         core.setFailed(error);
@@ -12429,9 +12434,12 @@ function debug(obj) {
     return JSON.stringify(obj, " ", 4)
 }
 
-async function getJsonReport(xmlPath) {
-    const reportXml = await fs.promises.readFile(xmlPath, "utf-8");
-    return await parser.parseStringPromise(reportXml);
+async function getJsonReport(xmlPaths) {
+    return Promise.all(xmlPaths.map(async (xmlPath) => {
+            const reportXml = await fs.promises.readFile(xmlPath.trim(), "utf-8");
+            return await parser.parseStringPromise(reportXml);
+        }
+    ))
 }
 
 async function getChangedFiles(base, head, client) {
