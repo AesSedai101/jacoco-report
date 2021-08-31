@@ -12379,6 +12379,8 @@ async function action() {
         const event = github.context.eventName;
         core.info(`Event is ${event}`);
 
+        if (debugMode) core.info(`commentId: ${commentId}`);
+
         var base;
         var head;
         var prNumber;
