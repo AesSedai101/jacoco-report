@@ -62,10 +62,10 @@ async function action() {
         }
 
         if (prNumber != null) {
-            if (commentId != 0) {
-                await updateComment(commentId, comment, client)
-            } else {
+            if (isNaN(commentId) || commentId == 0) {
                 await addComment(prNumber, comment, client);
+            } else {
+                await updateComment(commentId, comment, client)
             }
         }
     } catch (error) {
