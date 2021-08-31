@@ -14,6 +14,7 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 * `token` - [**required**] Github personal token to add commits to Pull Request
 * `min-coverage-overall` - [*optional*] The minimum code coverage that is required to pass for changed files
 * `min-coverage-changed-files` - [*optional*] The minimum code coverage that is required to pass for changed files
+* `comment-id` - [*optional*] A comment to update if there is an existing comment
 
 ### Outputs
 

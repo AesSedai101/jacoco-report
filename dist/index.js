@@ -12374,6 +12374,7 @@ async function action() {
         const reportPaths = (core.getInput('paths') + '').split("/\s+/");
         const minCoverageOverall = parseFloat(core.getInput('min-coverage-overall'));
         const minCoverageChangedFiles = parseFloat(core.getInput('min-coverage-changed-files'));
+        const commentId = parseInt(core.getInput('comment-id'));
         const debugMode = parseBooleans(core.getInput('debug-mode'));
         const event = github.context.eventName;
         core.info(`Event is ${event}`);
@@ -12424,7 +12425,11 @@ async function action() {
         }
 
         if (prNumber != null) {
-            await addComment(prNumber, comment, client);
+            if (commentId != 0) {
+                await updateComment(commentId, comment, client)
+            } else {
+                await addComment(prNumber, comment, client);
+            }
         }
     } catch (error) {
         core.setFailed(error);
@@ -12465,6 +12470,14 @@ async function getChangedFiles(base, head, client) {
 async function addComment(prNumber, comment, client) {
     await client.issues.createComment({
         issue_number: prNumber,
+        body: comment,
+        ...github.context.repo
+    });
+}
+
+async function updateComment(commentId, comment, client) {
+    await client.issues.updateComment( {
+        comment_id: commentId,
         body: comment,
         ...github.context.repo
     });

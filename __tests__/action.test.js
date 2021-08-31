@@ -32,6 +32,8 @@ beforeAll(() => {
                 return 45;
             case `min-coverage-changed-files`:
                 return 60;
+            case 'comment-id':
+                return 0;
         }
     });
     github.getOctokit = jest.fn(() => {
