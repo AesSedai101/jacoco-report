@@ -12371,7 +12371,7 @@ const render = __nccwpck_require__(8279);
 
 async function action() {
     try {
-        const reportPaths = (core.getInput('paths') + '').split("/\s+/");
+        const reportPaths = (core.getInput('paths') + '').split(/\s+/);
         const minCoverageOverall = parseFloat(core.getInput('min-coverage-overall'));
         const minCoverageChangedFiles = parseFloat(core.getInput('min-coverage-changed-files'));
         const commentId = parseInt(core.getInput('comment-id'));

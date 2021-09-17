@@ -8,13 +8,14 @@ const render = require('./render');
 
 async function action() {
     try {
-        const reportPaths = (core.getInput('paths') + '').split("/\s+/");
+        const reportPaths = (core.getInput('paths') + '').split(/\s+/);
         const minCoverageOverall = parseFloat(core.getInput('min-coverage-overall'));
         const minCoverageChangedFiles = parseFloat(core.getInput('min-coverage-changed-files'));
         const commentId = parseInt(core.getInput('comment-id'));
         const debugMode = parseBooleans(core.getInput('debug-mode'));
         const event = github.context.eventName;
         core.info(`Event is ${event}`);
+        core.info(`Paths are ${reportPaths}`)
 
         var base;
         var head;
