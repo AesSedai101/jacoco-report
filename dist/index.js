@@ -12423,7 +12423,7 @@ async function action() {
             core.setOutput("coverage-changed-files", parseFloat(filesCoverage.percentage.toFixed(2)));
 
             const covComment = render.getPRComment(overallCoverage, filesCoverage, minCoverageOverall, minCoverageChangedFiles)
-            comment += "### `" + report["name"] + "`" + `\n\n` + covComment + `\n`
+            comment += "### " + report.$.name + `\n\n` + covComment + `\n`
         }
 
         if (prNumber != null) {

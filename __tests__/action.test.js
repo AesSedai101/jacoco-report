@@ -78,6 +78,8 @@ describe("Pull Request event", function () {
 
         expect(comment.mock.calls[0][0].body).toEqual(`## Code coverage
 
+### jacoco-playground
+
 |File|Coverage [63.64%]|:green_apple:|
 |:-|:-:|:-:|
 |[StringOp.java](https://github.com/thsaravana/jacoco-playground/blob/77b14eb61efcd211ee93a7d8bac80cf292d207cc/src/main/java/com/madrapps/jacoco/operation/StringOp.java)|100%|:green_apple:|
